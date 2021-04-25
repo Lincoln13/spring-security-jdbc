@@ -1,6 +1,10 @@
 package com.example.authdb.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -22,7 +26,18 @@ public class Authentication {
     private Boolean disabled;
 
     @OneToMany(mappedBy = "authentication", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Authority> authorityList;
+
+    public Authentication() {
+    }
+
+    public Authentication(Authentication auth) {
+        this.userId = auth.getUserId();
+        this.userName = auth.getUserName();
+        this.password = new BCryptPasswordEncoder().encode(auth.getPassword());
+        this.disabled = Boolean.FALSE;
+    }
 
     public Long getUserId() {
         return userId;

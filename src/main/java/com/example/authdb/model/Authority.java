@@ -1,6 +1,9 @@
 package com.example.authdb.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,6 +19,7 @@ public class Authority {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Authentication.class)
     @JoinColumn(name = "user_id_fk", referencedColumnName = "user_id", nullable = false)
+    @JsonBackReference
     private Authentication authentication;
 
     @Column(name = "role_name")
@@ -26,6 +30,22 @@ public class Authority {
 
     @Column(name = "end_date")
     private Date endDate;
+
+    public Authority() {}
+
+    public Authority(Authority a) {
+        this.authorityId = a.getAuthorityId();
+        this.roleName = a.getRoleName();
+        this.startDate = setDateIfNull(a.getStartDate(), 0);
+        this.endDate = setDateIfNull(a.getEndDate(), 12);
+    }
+
+    private Date setDateIfNull(Date date, int i) {
+        if (date == null) {
+            return new DateTime().plusMonths(i).toDate();
+        }
+        return date;
+    }
 
     public Long getAuthorityId() {
         return authorityId;
