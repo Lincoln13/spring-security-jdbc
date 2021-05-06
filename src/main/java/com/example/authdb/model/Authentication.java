@@ -1,7 +1,5 @@
 package com.example.authdb.model;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
